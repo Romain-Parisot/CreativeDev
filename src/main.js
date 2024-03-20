@@ -1,50 +1,77 @@
+import { GUI } from "dat.gui";
+
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d"); // context type: https://developer.mozilla.org/fr/docs/Web/API/HTMLCanvasElement/getContext#typedecontexte
+const canvasWidth = canvas.getBoundingClientRect().width;
+const canvasHeight = canvas.getBoundingClientRect().height;
+canvas.width = canvasWidth;
+canvas.height = canvasHeight;
 
-/**
- *  CONFIG
- */
-
-const ROWS = 5;
-const COLS = 6;
-
-const red = "#E83A4E";
-const yellow = "#FFE800";
-const blue = "#3B76F5";
-const green = "#71E394";
-const colors = [red, yellow, blue, green];
-
-/**
- *  METHODS
- */
-const drawRectangle = (cWidth, cHeight, color) => {
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.rect(-cWidth / 2, -cHeight / 2, cWidth, cHeight);
-  ctx.fill();
-  ctx.closePath();
+const params = {
+  nBubbles: 500,
+  lineWidth: 1,
+  speed: 1000,
 };
 
-const deg2rad = (deg) => {
-  return (deg * 2 * Math.PI) / 360;
-};
+class Bubble {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.radius = 10;
 
-// parcourir les lignes et les colognes pour dessiner un damier (multicolore)
-// si 30% de chance : la dalle pivote de 45°
-const cellWidth = canvas.width / COLS;
-const cellHeight = canvas.height / ROWS;
+    this.vx = Math.random() * 2 - 1;
+    this.vy = Math.random() * 2 - 1;
+  }
 
-for (let i = 0; i < ROWS; i++) {
-  for (let j = 0; j < COLS; j++) {
-    ctx.save();
-    ctx.translate(
-      j * cellWidth + cellWidth / 2,
-      i * cellHeight + cellHeight / 2
-    );
-    if (Math.random() < 0.3) {
-      ctx.rotate(deg2rad(45));
+  update(speed = 1) {
+    this.x += this.vx * speed;
+    this.y += this.vy * speed;
+
+    if (this.x < 0 || this.x > canvas.width) {
+      this.vx *= -1;
     }
-    drawRectangle(cellWidth, cellHeight, colors[(i + j) % colors.length]);
+    if (this.y < 0 || this.y > canvas.height) {
+      this.vy *= -1;
+    }
+  }
+
+  draw() {
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate(this.x, this.y);
+    ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.closePath();
     ctx.restore();
   }
 }
+const generate = () => {
+  // sytle
+  ctx.fillStyle = "white";
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = params.lineWidth;
+  // setup
+  const bubbles = [];
+  for (let i = 0; i < params.nBubbles; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const bubble = new Bubble(x, y);
+    bubbles.push(bubble);
+  }
+  // draw
+  const update = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    bubbles.forEach((bubble) => {
+      bubble.update(params.speed);
+      bubble.draw();
+    });
+    window.requestAnimationFrame(update);
+  };
+
+  update();
+};
+
+const gui = new GUI();
+gui.add(params, "nBubbles", 1, 100).step(1);
+gui.add(params, "speed", -2, 2).step(0.1);
+generate();
