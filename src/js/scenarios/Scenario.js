@@ -21,6 +21,12 @@ export default class Scenario extends Scene {
       romainLetterWidth: 20,
       romainLetterHeight: 30,
       romainLetterBoldness: 2,
+      secondsNeedleSize: 0.6,
+      secondsNeedleWidth: 2,
+      minutesNeedleSize: 0.55,
+      minutesNeedleWidth: 8,
+      hoursNeedleSize: 0.5,
+      hoursNeedleWidth: 12,
     };
     this.debug = this.globalContext.debug;
     if (this.debug.active) {
@@ -54,6 +60,12 @@ export default class Scenario extends Scene {
     gui.add(this.params, "romainLetterWidth", 0, 50);
     gui.add(this.params, "romainLetterHeight", 0, 50);
     gui.add(this.params, "romainLetterBoldness", 0, 10);
+    gui.add(this.params, "secondsNeedleSize", 0, 1);
+    gui.add(this.params, "secondsNeedleWidth", 0, 20);
+    gui.add(this.params, "minutesNeedleSize", 0, 1);
+    gui.add(this.params, "minutesNeedleWidth", 0, 20);
+    gui.add(this.params, "hoursNeedleSize", 0, 1);
+    gui.add(this.params, "hoursNeedleWidth", 0, 20);
 
     gui.open();
   }
@@ -202,10 +214,25 @@ export default class Scenario extends Scene {
     let minuteAngle = ((minute + second / 60) / 60) * (2 * Math.PI);
     let hourAngle = ((hour + minute / 60) / 12) * (2 * Math.PI);
 
-    // Draw the hands
-    this.drawHand(secondAngle, 0.6, 2, this.params.SecondaryColor);
-    this.drawHand(minuteAngle, 0.6, 8, this.params.SecondaryColor);
-    this.drawHand(hourAngle, 0.5, 12, this.params.SecondaryColor);
+    // Draw needles
+    this.drawHand(
+      secondAngle,
+      this.params.secondsNeedleSize,
+      this.params.secondsNeedleWidth,
+      this.params.SecondaryColor
+    );
+    this.drawHand(
+      minuteAngle,
+      this.params.minutesNeedleSize,
+      this.params.minutesNeedleWidth,
+      this.params.SecondaryColor
+    );
+    this.drawHand(
+      hourAngle,
+      this.params.hoursNeedleSize,
+      this.params.hoursNeedleWidth,
+      this.params.SecondaryColor
+    );
 
     // Draw the numeral Romain letters
     let romainLetters = [
