@@ -1,46 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./public/favicon.ico">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
     <title>JS Canvas Project</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <canvas id="canvas-scene" class="scene"></canvas>
-        <h1>Project<br>structure</h1>
-        <canvas id="canvas-scene-2" class="scene"></canvas>
+      <canvas id="canvas-scene" class="scene"></canvas>
     </div>
     <script type="module" src="./main.js"></script>
-</body>
-<style>
+  </body>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
-        background-color: black;
+      background-color: rgb(75, 75, 75);
+      overflow: hidden;
     }
 
     h1 {
-        font-family: Arial, Helvetica, sans-serif;
-        text-align: center;
-        text-transform: uppercase;
-        font-style: italic;
-        color: white;
-        line-height: 1.4em;
-        font-size: 1.5rem;
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: center;
+      text-transform: uppercase;
+      font-style: italic;
+      color: white;
+      line-height: 1.4em;
+      font-size: 1.5rem;
     }
 
     .container {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
     }
 
     .scene {
-        width: 40vw;
-        height: 60vw;
+      width: 40vw;
+      height: 60vw;
     }
-</style>
-
+  </style>
 </html>
